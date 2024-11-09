@@ -1,12 +1,11 @@
 import OceanPlatformer from "./game";
-import PixelArtAnalyzer from "./imgToCoord"; 
+import PixelArtProcessor from "./coord";
 
 export default function Home() {
   return (
     <div>
       <OceanPlatformer />
-      <PixelArtAnalyzer/>
-
+      <PixelArtProcessor/>
     </div>
   );
 }
