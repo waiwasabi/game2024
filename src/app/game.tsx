@@ -1,0 +1,190 @@
+'use client'
+
+import React, { useState, useEffect } from 'react';
+import pixels from '../../public/pixels.json';
+
+
+const OceanPlatformer = () => {
+  const [playerPos, setPlayerPos] = useState({ x: 50, y: 200 });
+  const [velocity, setVelocity] = useState({ x: 0, y: 0 });
+  const [isJumping, setIsJumping] = useState(false);
+  const [gameWon, setGameWon] = useState(false);
+
+  // Pixel style
+  const pixel_width = 20
+
+  // Platform positions
+
+  const platforms = pixels["platforms"];
+
+  // Portal position
+  const portal = { x: 550, y: 150, width: 30, height: 40 };
+
+  // Game constants
+  const GRAVITY = 0.5;
+  const JUMP_FORCE = -12;
+  const MOVE_SPEED = 5;
+
+  // Handle keyboard input
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (gameWon) return;
+      
+      switch (e.key) {
+        case 'ArrowLeft':
+          setVelocity(v => ({ ...v, x: -MOVE_SPEED }));
+          break;
+        case 'ArrowRight':
+          setVelocity(v => ({ ...v, x: MOVE_SPEED }));
+          break;
+        case ' ':
+        case 'ArrowUp':
+          if (!isJumping) {
+            setVelocity(v => ({ ...v, y: JUMP_FORCE }));
+            setIsJumping(true);
+          }
+          break;
+        default:
+          break;
+      }
+    };
+
+    const handleKeyUp = (e) => {
+      if (gameWon) return;
+      
+      switch (e.key) {
+        case 'ArrowLeft':
+        case 'ArrowRight':
+          setVelocity(v => ({ ...v, x: 0 }));
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [isJumping, gameWon]);
+
+  // Game loop
+  useEffect(() => {
+    if (gameWon) return;
+
+    const gameLoop = setInterval(() => {
+      setPlayerPos(pos => {
+        const newPos = {
+          x: pos.x + velocity.x,
+          y: pos.y + velocity.y
+        };
+
+        // Apply gravity
+        setVelocity(v => ({ ...v, y: v.y + GRAVITY }));
+
+        // Check platform collisions
+        let onPlatform = false;
+        platforms.forEach(platform => {
+          if (newPos.x + 20 > platform.x &&
+              newPos.x < platform.x + pixel_width &&
+              newPos.y + 40 > platform.y &&
+              newPos.y + 40 < platform.y + pixel_width + 5) {
+            newPos.y = platform.y - 40;
+            setVelocity(v => ({ ...v, y: 0 }));
+            setIsJumping(false);
+            onPlatform = true;
+          }
+        });
+
+        // Check portal collision
+        if (newPos.x + 20 > portal.x &&
+            newPos.x < portal.x + portal.width &&
+            newPos.y + 40 > portal.y &&
+            newPos.y < portal.y + portal.height) {
+          setGameWon(true);
+        }
+
+        // Boundary checks
+        newPos.x = Math.max(0, Math.min(newPos.x, 750));
+        newPos.y = Math.min(newPos.y, 360);
+
+        return newPos;
+      });
+    }, 16);
+
+    return () => clearInterval(gameLoop);
+  }, [velocity, gameWon]);
+
+  return (
+    <div className="relative w-full max-w-screen-lg mx-auto h-96 bg-blue-200 overflow-hidden rounded-lg border-4 border-blue-400">
+      {/* Ocean background elements */}
+      <div className="absolute inset-0 bg-gradient-to-b from-blue-200 to-blue-400" />
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-blue-500 opacity-30" />
+      
+      {/* Bubbles */}
+      <div className="absolute top-10 left-20 w-4 h-4 rounded-full bg-white opacity-30 animate-bounce" />
+      <div className="absolute top-20 left-40 w-3 h-3 rounded-full bg-white opacity-20 animate-bounce" />
+      <div className="absolute top-15 right-20 w-5 h-5 rounded-full bg-white opacity-25 animate-bounce" />
+
+      {/* Platforms */}
+      {platforms.map((platform, index) => (
+        <img
+          src="platform.png"
+          key={index}
+          className="absolute bg-amber-800 rounded"
+          style={{
+            left: platform.x,
+            top: platform.y,
+            width: pixel_width,
+            height: pixel_width
+          }}
+        />
+      ))}
+
+      {/* Portal */}
+      <img
+        src = "portal.png"
+        className="absolute bg-yellow-400 rounded animate-pulse"
+        style={{
+          left: portal.x,
+          top: portal.y,
+          width: portal.width,
+          height: portal.height
+        }}
+      />
+
+      {/* Player */}
+      <img
+        src = "player.png"
+        className="absolute bg-red-500 rounded"
+        style={{
+          left: playerPos.x,
+          top: playerPos.y,
+          width: 20,
+          height: 40,
+          transition: 'transform 0.1s',
+          transform: `scaleX(${velocity.x < 0 ? -1 : 1})`
+        }}
+      />
+
+      {/* Win message */}
+      {gameWon && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="text-4xl text-white font-bold">You Win!</div>
+        </div>
+      )}
+
+      {/* Instructions */}
+      <div className="absolute top-4 left-4 text-blue-800">
+        <p>Use arrow keys to move</p>
+        <p>Space or Up arrow to jump</p>
+        <p>Reach the yellow portal to win!</p>
+      </div>
+    </div>
+  );
+};
+
+export default OceanPlatformer;
