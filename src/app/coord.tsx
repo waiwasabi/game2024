@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useRef } from 'react'
+
 interface GameObject {
   x: number
   y: number
