@@ -2,7 +2,7 @@
 import React, { useState, useRef } from "react";
 import PixelRow from "./PixelRow";
 import "../styles/DrawingPad.css";
-import { exportComponentAsPNG } from "react-component-export-image";
+import html2canvas from 'html2canvas';
 
 enum Color {
     WHITE = 1,
@@ -37,14 +37,11 @@ function createJSON(colorRows: Color[][], width: number, height: number, width_m
         for (let column = 0; column < width; column++) {
             const curr = {"x": column * width_mult, "y": row * height_mult};
             switch(colorRows[row][column]) {
-                case Color.WHITE:
+                case Color.RED:
                     output["player"].push(curr);
                     break;
-                case Color.RED:
-                    output["platforms"].push(curr);
-                    break;
                 case Color.BROWN:
-                    output["portal"].push(curr);
+                    output["platforms"].push(curr);
                     break;
             }
         }
@@ -56,7 +53,7 @@ function createJSON(colorRows: Color[][], width: number, height: number, width_m
 export default function DrawingPad(props: DrawingPadProps) {
     const { width, height, baseColor} = props;
   
-    const panelRef = useRef<HTMLDivElement>(null);
+    const panelRef = useRef(null);
 
     let count = 0;
 
@@ -67,6 +64,17 @@ export default function DrawingPad(props: DrawingPadProps) {
         for (let x = 0; x < width; x++) curr.push(baseColor);
         colorRows.push(curr);
     }
+
+    const exportAsPNG = () => {
+        if (panelRef.current) {
+          html2canvas(panelRef.current).then((canvas) => {
+            const link = document.createElement('a');
+            link.download = 'component.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+          });
+        }
+      };
 
     const [arr, setRows] = useState(colorRows);
     const [paletteColor, setPaletteColor] = useState(Color.RED);
@@ -98,8 +106,12 @@ export default function DrawingPad(props: DrawingPadProps) {
                 Reset
             </button>
 
-            <button onClick={() => exportComponentAsPNG(panelRef)} className="button">
+            <button onClick={exportAsPNG} className="button">
               Export as PNG
+            </button>
+
+            <button onClick={() => {console.log(createJSON(arr, width, height, 1, 1));}} className="button">
+              Print Objects
             </button>
         </div>
       </div>
