@@ -29,7 +29,6 @@ const OceanPlatformer = (props: ObjectsJSON) => {
   const [gameWon, setGameWon] = useState(false);
   const [isWalkingFrame1, setIsWalkingFrame1] = useState(true);
 
-
   // Pixel style
   const pixel_width = 40
 
@@ -48,7 +47,7 @@ const OceanPlatformer = (props: ObjectsJSON) => {
   const isMoving = velocity.x !== 0 || velocity.y !== 0; // Check if the player is moving
 
   useEffect(() => {
-    let interval;
+    let interval: NodeJS.Timeout;
     if (isMoving) {
       // Start the animation interval if the player is moving
       interval = setInterval(() => {
@@ -167,7 +166,7 @@ const OceanPlatformer = (props: ObjectsJSON) => {
     <div>
     <div className="relative w-3/4 mx-auto h-100 bg-blue-200 overflow-hidden rounded-lg border-4 border-blue-400">
       {/* Ocean background elements */}
-      <img src={backgroundImg} class="object-cover"/>
+      <img src={backgroundImg} className="object-cover"/>
 
       {/* Platforms */}
       {platforms.map((platform, index) => (
