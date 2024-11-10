@@ -6,6 +6,7 @@ enum Color {
     WHITE = 1,
     RED,
     BROWN,
+    YELLOW,
 }
 
 interface PixelRowProps {

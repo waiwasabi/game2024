@@ -3,9 +3,19 @@
 import React, { useState, useEffect } from 'react';
 import pixels from '../../public/pixels.json';
 
+interface Coord {
+  "x": number,
+  "y": number
+}
 
-const OceanPlatformer = () => {
-  const [playerPos, setPlayerPos] = useState(pixels["player"]);
+interface ObjectsJSON {
+  "player": Coord,
+  "platforms": Coord[],
+  "portal": Coord,
+}
+
+const OceanPlatformer = (props: ObjectsJSON) => {
+  const [playerPos, setPlayerPos] = useState(props.player);
   const [velocity, setVelocity] = useState({ x: 0, y: 0 });
   const [isJumping, setIsJumping] = useState(false);
   const [gameWon, setGameWon] = useState(false);
@@ -15,10 +25,10 @@ const OceanPlatformer = () => {
 
   // Platform positions
   
-  const platforms = pixels["platforms"];
+  const platforms = props.platforms;
 
   // Portal position
-  const portal = pixels["portal"];
+  const portal = props.portal;
 
   // Game constants
   const GRAVITY = 0.5;
@@ -27,7 +37,7 @@ const OceanPlatformer = () => {
 
   // Handle keyboard input
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: any) => {
       if (gameWon) return;
       
       switch (e.key) {
@@ -49,7 +59,7 @@ const OceanPlatformer = () => {
       }
     };
 
-    const handleKeyUp = (e) => {
+    const handleKeyUp = (e: any) => {
       if (gameWon) return;
       
       switch (e.key) {

@@ -5,6 +5,7 @@ enum Color {
     WHITE = 1,
     RED,
     BROWN,
+    YELLOW,
 }
 
 interface PixelProps {
@@ -36,6 +37,8 @@ function Pixel(props: PixelProps) {
                 return "#ff0000";
             case Color.BROWN:
                 return "rgb(107, 59, 24)";
+            case Color.YELLOW:
+                return "#ffff00";
         }
     }
 
@@ -46,7 +49,7 @@ function Pixel(props: PixelProps) {
           onMouseEnter={mouseEnter}
           onMouseLeave={mouseLeave}
           style={{ backgroundColor: getColor() }}
-        ></div>
+        />
       );
 }
 
