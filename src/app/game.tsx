@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import pixels from '../../public/pixels.json';
+import Image_Generator from './image_generator';
 
 interface Coord {
   "x": number,
@@ -15,13 +16,21 @@ interface ObjectsJSON {
 }
 
 const OceanPlatformer = (props: ObjectsJSON) => {
+  const [platformImg, setPlatformImg] = useState("platform.png");
+  const [portalImg, setPortalImg] = useState("portal.png");
+  const [backgroundImg, setBackgroundImg] = useState("background.png");
+
+  // const [platforms, setPlatforms] = useState(pixels["platforms"]);
+  // const [portal, setPortal] = useState(pixels["portal"]);
+
   const [playerPos, setPlayerPos] = useState(props.player);
   const [velocity, setVelocity] = useState({ x: 0, y: 0 });
   const [isJumping, setIsJumping] = useState(false);
   const [gameWon, setGameWon] = useState(false);
 
+
   // Pixel style
-  const pixel_width = 20
+  const pixel_width = 40
 
   // Platform positions
   
@@ -98,11 +107,11 @@ const OceanPlatformer = (props: ObjectsJSON) => {
         // Check platform collisions
         let onPlatform = false;
         platforms.forEach(platform => {
-          if (newPos.x + 20 > platform.x &&
+          if (newPos.x + pixel_width >= platform.x &&
               newPos.x < platform.x + pixel_width &&
-              newPos.y + 40 > platform.y &&
-              newPos.y + 40 < platform.y + pixel_width + 5) {
-            newPos.y = platform.y - 40;
+              newPos.y + pixel_width >= platform.y &&
+              newPos.y + pixel_width <= platform.y + pixel_width + 5) {
+            newPos.y = platform.y - pixel_width;
             setVelocity(v => ({ ...v, y: 0 }));
             setIsJumping(false);
             onPlatform = true;
@@ -110,7 +119,7 @@ const OceanPlatformer = (props: ObjectsJSON) => {
         });
 
         // Check portal collision
-        if (newPos.x + 20 > portal.x &&
+        if (newPos.x + pixel_width > portal.x &&
             newPos.x < portal.x + pixel_width &&
             newPos.y + 40 > portal.y &&
             newPos.y < portal.y + 2 * pixel_width) {
@@ -119,7 +128,7 @@ const OceanPlatformer = (props: ObjectsJSON) => {
 
         // Boundary checks
         newPos.x = Math.max(0, Math.min(newPos.x, 750));
-        newPos.y = Math.min(newPos.y, 360);
+        newPos.y = Math.min(newPos.y, 530);
 
         return newPos;
       });
@@ -129,19 +138,15 @@ const OceanPlatformer = (props: ObjectsJSON) => {
   }, [velocity, gameWon]);
 
   return (
-    <div className="relative w-full max-w-screen-lg mx-auto h-96 bg-blue-200 overflow-hidden rounded-lg border-4 border-blue-400">
+    <div>
+    <div className="relative w-3/4 mx-auto h-100 bg-blue-200 overflow-hidden rounded-lg border-4 border-blue-400">
       {/* Ocean background elements */}
-      <img src="background.png" className="absolute inset-0 bg-gradient-to-b from-blue-200 to-blue-400" />
-      
-      {/* Bubbles */}
-      <div className="absolute top-10 left-20 w-4 h-4 rounded-full bg-white opacity-30 animate-bounce" />
-      <div className="absolute top-20 left-40 w-3 h-3 rounded-full bg-white opacity-20 animate-bounce" />
-      <div className="absolute top-15 right-20 w-5 h-5 rounded-full bg-white opacity-25 animate-bounce" />
+      <img src={backgroundImg} class="object-cover"/>
 
       {/* Platforms */}
       {platforms.map((platform, index) => (
         <img
-          src="platform.png"
+          src={platformImg}
           key={index}
           className="absolute bg-amber-800 rounded"
           style={{
@@ -155,7 +160,7 @@ const OceanPlatformer = (props: ObjectsJSON) => {
 
       {/* Portal */}
       <img
-        src = "portal.png"
+        src = {portalImg}
         className="absolute bg-yellow-400 rounded animate-pulse"
         style={{
           left: portal.x,
@@ -167,13 +172,13 @@ const OceanPlatformer = (props: ObjectsJSON) => {
 
       {/* Player */}
       <img
-        src = "player.png"
-        className="absolute bg-red-500 rounded"
+        src = "walk.png"
+        className="absolute rounded"
         style={{
           left: playerPos.x,
           top: playerPos.y,
-          width: 20,
-          height: 40,
+          width: pixel_width,
+          height: pixel_width,
           transition: 'transform 0.1s',
           transform: `scaleX(${velocity.x < 0 ? -1 : 1})`
         }}
@@ -187,12 +192,23 @@ const OceanPlatformer = (props: ObjectsJSON) => {
       )}
 
       {/* Instructions */}
-      <div className="absolute top-4 left-4 text-blue-800">
+      <div className="absolute top-4 left-4 text-blue-800 bg-slate-100 bg-opacity-50">
         <p>Use arrow keys to move</p>
         <p>Space or Up arrow to jump</p>
         <p>Reach the yellow portal to win!</p>
       </div>
     </div>
+
+    <div>
+        <Image_Generator setBackgroundImg={setBackgroundImg} setPlatformImg={setPlatformImg} setPortalImg={setPortalImg}/>
+    </div>
+
+    {/* <div>
+      <p>{backgroundImg}</p>
+    </div> */}
+      
+  </div>
+
   );
 };
 
