@@ -36,6 +36,12 @@ export default function DrawingPad(props: DrawingPadProps) {
   
     return (
       <div id="drawingPad">
+        <div className="picker">
+            <button className="roundButtonRed" onClick={() => setPaletteColor(Color.RED)}/>
+            <button className="roundButtonBrown" onClick={() => setPaletteColor(Color.BROWN)}/>
+            <button className="roundButtonWhite" onClick={() => setPaletteColor(Color.WHITE)}/>
+        </div>
+
         <div id="pixels" ref={panelRef}>
             {arr.map((colors, row) => 
             <PixelRow
@@ -44,7 +50,7 @@ export default function DrawingPad(props: DrawingPadProps) {
                 row={row}
                 key={"row: " + row + " color: " + count}
                 handleClick={(row_ind, column_ind) => 
-                    {setRows(arr.map((row, ind1) => row.map((val, ind2) => (row_ind === ind1 && column_ind === ind2) ? Color.RED : val)));}}
+                    {setRows(arr.map((row, ind1) => row.map((val, ind2) => (row_ind === ind1 && column_ind === ind2) ? paletteColor : val)));}}
             />
             )}
         </div>

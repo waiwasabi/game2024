@@ -35,7 +35,7 @@ function Pixel(props: PixelProps) {
             case Color.RED:
                 return "#ff0000";
             case Color.BROWN:
-                return "#964b00";
+                return "rgb(107, 59, 24)";
         }
     }
 
