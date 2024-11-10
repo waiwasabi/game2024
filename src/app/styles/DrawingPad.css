@@ -1,9 +1,93 @@
 #drawingPad {
+    margin-top: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center; 
 }
   
-  #pixels {
+#pixels {
     margin-bottom: 2rem;
+}
+
+.button {
+    font-size: 1.25rem;
+    background-color: red;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    transition: background-color 0.2s ease-in-out;
+    margin-bottom: 2rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+
+    &:hover {
+      cursor: pointer;
+      background-color: transparent;
+      border-color: red;
+    }
   }
+
+  .roundButtonRed {
+    display: flex;
+    background-color: red;
+    padding: 2rem;
+    vertical-align: middle;
+    border-radius: 100rem;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    transition: background-color 0.2s ease-in-out;
+    margin: 3rem !important;
+
+    &:hover {
+      cursor: pointer;
+      background-color: black;
+      border: 5px solid transparent;
+      border-color: red;
+    }
+  }
+
+  .roundButtonWhite {
+    display: flex;
+    background-color: white;
+    padding: 2rem;
+    vertical-align: middle;
+    border-radius: 100rem;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    transition: background-color 0.2s ease-in-out;
+    margin: 3rem !important;
+
+    &:hover {
+      cursor: pointer;
+      background-color: black;
+      border: 5px solid transparent;
+      border-color: white;
+    }
+  }
+
+  .roundButtonBrown {
+    display: flex;
+    background-color: rgb(107, 59, 24);
+    padding: 2rem;
+    vertical-align: middle;
+    border-radius: 100rem;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    transition: background-color 0.2s ease-in-out;
+    margin: 3rem !important;
+
+    &:hover {
+      cursor: pointer;
+      background-color: black;
+      border: 5px solid transparent;
+      border-color: rgb(107, 59, 24);
+    }
+  }
+
+.picker {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
