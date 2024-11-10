@@ -9,12 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@imgly/plugin-background-removal-web": "^1.0.0",
-    "@next/env": "^15.0.3",
-    "dotenv": "^16.4.5",
     "next": "15.0.3",
-    "openai": "^4.71.1",
     "react": "19.0.0-rc-66855b96-20241106",
+    "react-component-export-image": "^1.0.6",
     "react-dom": "19.0.0-rc-66855b96-20241106"
   },
   "devDependencies": {
