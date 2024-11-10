@@ -11,19 +11,18 @@ enum Color {
 interface PixelRowProps {
     colors: Color[],
     paletteColor: Color,
-    row: number
-    key: string,
+    row: number,
     handleClick: (row: number, column: number) => void,
 }
 
-export default function PixelRow(props: PixelRowProps) {
+function PixelRow(props: PixelRowProps) {
     const {colors, paletteColor, handleClick, row} = props;
   
     return (
-        <div className="row" key={"row: " + row}>
+        <div className="row">
             {colors.map((color, _) => 
             <Pixel
-                key={"row: " + row + " column: " + _} 
+                key={"row: " + row + " column: " + _ + " color: " + color} 
                 paletteColor={paletteColor} 
                 color={color}
                 handleClick={(_) => handleClick(row, _)}
@@ -32,3 +31,5 @@ export default function PixelRow(props: PixelRowProps) {
         </div>
     );
   }
+
+  export default React.memo(PixelRow);

@@ -11,21 +11,21 @@ interface PixelProps {
     handleClick: (_: number) => void,
     paletteColor: Color,
     color: Color,
-    key: string,
     column: number,
 }
 
-export default function Pixel(props: PixelProps) {
-    const {handleClick, paletteColor, color, key, column} = props;
+function Pixel(props: PixelProps) {
+    const {handleClick, paletteColor, color, column} = props;
 
-    const [pixelColor, setColor] = useState(props.color);
+    let currColor = color;
+    const [pixelColor, setColor] = useState(color);
 
     function mouseEnter() {
-        if (pixelColor !== paletteColor) setColor(paletteColor);
+        if (currColor !== paletteColor) setColor(paletteColor);
     }
 
     function mouseLeave() {
-        setColor(color);
+        if (currColor !== paletteColor) setColor(currColor);
     }
 
     function getColor() {
@@ -42,11 +42,12 @@ export default function Pixel(props: PixelProps) {
     return (
         <div
           className="pixel"
-          onClick={() => {console.log("clicked!"); handleClick(column);}}
+          onClick={() => {currColor = paletteColor; handleClick(column);}}
           onMouseEnter={mouseEnter}
           onMouseLeave={mouseLeave}
           style={{ backgroundColor: getColor() }}
-          key={key}
         ></div>
       );
 }
+
+export default React.memo(Pixel);

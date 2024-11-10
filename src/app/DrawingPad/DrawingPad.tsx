@@ -20,6 +20,8 @@ export default function DrawingPad(props: DrawingPadProps) {
   
     const panelRef = useRef(null);
 
+    let count = 0;
+
     const colorRows: Color[][] = [];
 
     for (let y = 0; y < height; y++) {
@@ -40,11 +42,17 @@ export default function DrawingPad(props: DrawingPadProps) {
                 colors={colors} 
                 paletteColor={paletteColor} 
                 row={row}
-                key={"row: " + row}
+                key={"row: " + row + " color: " + count}
                 handleClick={(row_ind, column_ind) => 
                     {setRows(arr.map((row, ind1) => row.map((val, ind2) => (row_ind === ind1 && column_ind === ind2) ? Color.RED : val)));}}
             />
             )}
+        </div>
+
+        <div>
+            <button onClick={() => {setRows(arr.map(row => row.map(val => baseColor)))}} className="button">
+                Reset
+            </button>
         </div>
       </div>
     );
