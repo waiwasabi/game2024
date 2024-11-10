@@ -4,25 +4,41 @@ import React, { useState, useEffect } from 'react';
 import pixels from '../../public/pixels.json';
 import Image_Generator from './image_generator';
 
+interface Coord {
+  "x": number,
+  "y": number
+}
 
-const OceanPlatformer = () => {
+interface ObjectsJSON {
+  "player": Coord,
+  "platforms": Coord[],
+  "portal": Coord,
+}
+
+const OceanPlatformer = (props: ObjectsJSON) => {
   const [platformImg, setPlatformImg] = useState("platform.png");
   const [portalImg, setPortalImg] = useState("portal.png");
   const [backgroundImg, setBackgroundImg] = useState("background.png");
 
-  const [platforms, setPlatforms] = useState(pixels["platforms"]);
-  const [portal, setPortal] = useState(pixels["portal"]);
+  // const [platforms, setPlatforms] = useState(pixels["platforms"]);
+  // const [portal, setPortal] = useState(pixels["portal"]);
 
-  const [playerPos, setPlayerPos] = useState(pixels["player"]);
+  const [playerPos, setPlayerPos] = useState(props.player);
   const [velocity, setVelocity] = useState({ x: 0, y: 0 });
   const [isJumping, setIsJumping] = useState(false);
   const [gameWon, setGameWon] = useState(false);
   const [isWalkingFrame1, setIsWalkingFrame1] = useState(true);
 
-  const [testingMode, setTestingMode] = useState(true);
 
   // Pixel style
   const pixel_width = 40
+
+  // Platform positions
+  
+  const platforms = props.platforms;
+
+  // Portal position
+  const portal = props.portal;
 
   // Game constants
   const GRAVITY = 0.5;
@@ -50,7 +66,7 @@ const OceanPlatformer = () => {
 
   // Handle keyboard input
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: any) => {
       if (gameWon) return;
       
       switch (e.key) {
@@ -72,7 +88,7 @@ const OceanPlatformer = () => {
       }
     };
 
-    const handleKeyUp = (e) => {
+    const handleKeyUp = (e: any) => {
       if (gameWon) return;
       
       switch (e.key) {
@@ -138,7 +154,7 @@ const OceanPlatformer = () => {
 
         // Boundary checks
         newPos.x = Math.max(0, Math.min(newPos.x, 750));
-        newPos.y = Math.min(newPos.y, 360);
+        newPos.y = Math.min(newPos.y, 530);
 
         return newPos;
       });
@@ -149,9 +165,9 @@ const OceanPlatformer = () => {
 
   return (
     <div>
-    <div className="relative w-3/4 mx-auto h-96 bg-blue-200 overflow-hidden rounded-lg border-4 border-blue-400">
+    <div className="relative w-3/4 mx-auto h-100 bg-blue-200 overflow-hidden rounded-lg border-4 border-blue-400">
       {/* Ocean background elements */}
-      <img src={backgroundImg}/>
+      <img src={backgroundImg} class="object-cover"/>
 
       {/* Platforms */}
       {platforms.map((platform, index) => (
@@ -202,7 +218,7 @@ const OceanPlatformer = () => {
       )}
 
       {/* Instructions */}
-      <div className="absolute top-4 left-4 text-blue-800">
+      <div className="absolute top-4 left-4 text-blue-800 bg-slate-100 bg-opacity-50">
         <p>Use arrow keys to move</p>
         <p>Space or Up arrow to jump</p>
         <p>Reach the yellow portal to win!</p>
