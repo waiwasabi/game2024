@@ -16,7 +16,7 @@ enum ImageType {
 function generateImagePrompt(imageType: any, prompt: any): string {
   if (imageType === ImageType.platform) {
     return (
-      "A 1 by 1 ratio pixel art of a square platform sprite that takes up the whole image with the theme:" +
+      "A 1 by 1 ratio pixel art of a square platform tilemap sprite that takes up the whole image with the theme:" +
       prompt
     );
   } else if (imageType === ImageType.background) {

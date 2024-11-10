@@ -30,7 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div className="flex flex-col items-center mb-5 mt-5">
-          <Title text="Gameify" />
+          <Title text="NekoPix" />
         </div>
         {children}
       </body>
