@@ -5,7 +5,7 @@ import pixels from '../../public/pixels.json';
 
 
 const OceanPlatformer = () => {
-  const [playerPos, setPlayerPos] = useState({ x: 50, y: 200 });
+  const [playerPos, setPlayerPos] = useState(pixels["player"]);
   const [velocity, setVelocity] = useState({ x: 0, y: 0 });
   const [isJumping, setIsJumping] = useState(false);
   const [gameWon, setGameWon] = useState(false);
@@ -14,11 +14,11 @@ const OceanPlatformer = () => {
   const pixel_width = 20
 
   // Platform positions
-
+  
   const platforms = pixels["platforms"];
 
   // Portal position
-  const portal = { x: 550, y: 150, width: 30, height: 40 };
+  const portal = pixels["portal"];
 
   // Game constants
   const GRAVITY = 0.5;
@@ -101,9 +101,9 @@ const OceanPlatformer = () => {
 
         // Check portal collision
         if (newPos.x + 20 > portal.x &&
-            newPos.x < portal.x + portal.width &&
+            newPos.x < portal.x + pixel_width &&
             newPos.y + 40 > portal.y &&
-            newPos.y < portal.y + portal.height) {
+            newPos.y < portal.y + 2 * pixel_width) {
           setGameWon(true);
         }
 
@@ -121,8 +121,7 @@ const OceanPlatformer = () => {
   return (
     <div className="relative w-full max-w-screen-lg mx-auto h-96 bg-blue-200 overflow-hidden rounded-lg border-4 border-blue-400">
       {/* Ocean background elements */}
-      <div className="absolute inset-0 bg-gradient-to-b from-blue-200 to-blue-400" />
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-blue-500 opacity-30" />
+      <img src="background.png" className="absolute inset-0 bg-gradient-to-b from-blue-200 to-blue-400" />
       
       {/* Bubbles */}
       <div className="absolute top-10 left-20 w-4 h-4 rounded-full bg-white opacity-30 animate-bounce" />
@@ -151,8 +150,8 @@ const OceanPlatformer = () => {
         style={{
           left: portal.x,
           top: portal.y,
-          width: portal.width,
-          height: portal.height
+          width: pixel_width,
+          height: pixel_width * 2
         }}
       />
 
