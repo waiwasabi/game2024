@@ -132,7 +132,7 @@ export default function Home() {
   return (
     <div>
       <OceanPlatformer player={jsonObject.player} platforms={jsonObject.platforms} portal={jsonObject.portal}/>
-      <DrawingPad width={25} height={12} baseColor={1} updateJSON={updateJSON}/>
+      <DrawingPad width={30} height={16} baseColor={1} updateJSON={updateJSON}/>
     </div>
   );
 }

@@ -29,6 +29,8 @@ const OceanPlatformer = (props: ObjectsJSON) => {
   const [gameWon, setGameWon] = useState(false);
   const [isWalkingFrame1, setIsWalkingFrame1] = useState(true);
 
+  const originalPos = props.player;
+
   // Pixel style
   const pixel_width = 40
 
@@ -146,14 +148,13 @@ const OceanPlatformer = (props: ObjectsJSON) => {
           setGameWon(true);
         }
 
-        if(newPos.y > 500) {
-          newPos.x = pixels["player"].x;
-          newPos.y = pixels["player"].y;
+        if(newPos.y > 1000) {
+          newPos.x = originalPos.x;
+          newPos.y = originalPos.y;
         }
 
         // Boundary checks
         newPos.x = Math.max(0, Math.min(newPos.x, 1000));
-        newPos.y = Math.min(newPos.y, 530);
 
         return newPos;
       });
