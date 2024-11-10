@@ -1,0 +1,51 @@
+'use client'
+import React, { useState, useRef } from "react";
+import PixelRow from "./PixelRow";
+import "../styles/DrawingPad.css";
+
+enum Color {
+    WHITE = 1,
+    RED,
+    BROWN,
+}
+
+interface DrawingPadProps {
+    width: number,
+    height: number,
+    baseColor: Color
+}
+
+export default function DrawingPad(props: DrawingPadProps) {
+    const { width, height, baseColor} = props;
+  
+    const panelRef = useRef(null);
+
+    const colorRows: Color[][] = [];
+
+    for (let y = 0; y < height; y++) {
+        const curr = [];
+        for (let x = 0; x < width; x++) curr.push(baseColor);
+        colorRows.push(curr);
+    }
+
+    const [arr, setRows] = useState(colorRows);
+    const [paletteColor, setPaletteColor] = useState(Color.RED);
+
+  
+    return (
+      <div id="drawingPad">
+        <div id="pixels" ref={panelRef}>
+            {arr.map((colors, row) => 
+            <PixelRow
+                colors={colors} 
+                paletteColor={paletteColor} 
+                row={row}
+                key={"row: " + row}
+                handleClick={(row_ind, column_ind) => 
+                    {setRows(arr.map((row, ind1) => row.map((val, ind2) => (row_ind === ind1 && column_ind === ind2) ? Color.RED : val)));}}
+            />
+            )}
+        </div>
+      </div>
+    );
+  }
