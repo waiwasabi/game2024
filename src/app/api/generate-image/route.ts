@@ -16,16 +16,16 @@ enum ImageType {
 function generateImagePrompt(imageType: any, prompt: any): string {
   if (imageType === ImageType.platform) {
     return (
-      "A 1 by 1 ratio pixel art of a square platform sprite that takes up the whole image with the theme:" +
+      "A 1 by 1 ratio pixel art of a single square platform tilemap tile game sprite that takes up the whole image with the theme:" +
       prompt
     );
   } else if (imageType === ImageType.background) {
     return (
-      "A background image for a pixel art game with the theme:" + prompt
+      "A minimalistic darkish background image for a pixel art game with the theme:" + prompt
     );
   } else if (imageType === ImageType.portal) {
     return (
-      "A 1 by 1 ratio pixel art of an exit gateway that takes up the whole image with the theme:" +
+      "A 1 by 1 ratio pixel art of a platform game portal asset that takes up the whole image with the theme:" +
       prompt
     );
   }

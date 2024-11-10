@@ -18,7 +18,7 @@ interface ObjectsJSON {
 const OceanPlatformer = (props: ObjectsJSON) => {
   const [platformImg, setPlatformImg] = useState("platform.png");
   const [portalImg, setPortalImg] = useState("portal.png");
-  const [backgroundImg, setBackgroundImg] = useState("background.png");
+  const [backgroundImg, setBackgroundImg] = useState("background.jpg");
 
   // const [platforms, setPlatforms] = useState(pixels["platforms"]);
   // const [portal, setPortal] = useState(pixels["portal"]);
@@ -166,7 +166,7 @@ const OceanPlatformer = (props: ObjectsJSON) => {
     <div>
     <div className="relative w-3/4 mx-auto h-100 bg-blue-200 overflow-hidden rounded-lg border-4 border-blue-400">
       {/* Ocean background elements */}
-      <img src={backgroundImg} className="object-cover"/>
+      <img src={backgroundImg} className="object-cover opacity-50"/>
 
       {/* Platforms */}
       {platforms.map((platform, index) => (
@@ -186,7 +186,7 @@ const OceanPlatformer = (props: ObjectsJSON) => {
       {/* Portal */}
       <img
         src = {portalImg}
-        className="absolute bg-yellow-400 rounded animate-pulse"
+        className="absolute rounded animate-pulse"
         style={{
           left: portal.x,
           top: portal.y,
