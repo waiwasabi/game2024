@@ -8,46 +8,54 @@ const openai = new OpenAI({
 
 // Define an enum for image types
 enum ImageType {
-    background = "background",
-    platform = "platform",
-    portal = "portal",
+  background = "background",
+  platform = "platform",
+  portal = "portal",
+}
+
+function generateImagePrompt(imageType: any, prompt: any): string {
+  if (imageType === ImageType.platform) {
+    return (
+      "A 1 by 1 ratio pixel art of a square platform sprite that takes up the whole image with the theme:" +
+      prompt
+    );
+  } else if (imageType === ImageType.background) {
+    return (
+      "A background image for a pixel art game with the theme:" + prompt
+    );
+  } else if (imageType === ImageType.portal) {
+    return (
+      "A 1 by 1 ratio pixel art of an exit gateway that takes up the whole image with the theme:" +
+      prompt
+    );
+  }
+  return "";
 }
 
 export async function POST(req: NextRequest) {
   try {
     // Attempt to parse the JSON body
     const body = await req.json();
-    if (!["prompt", "imageType"].every(key => key in body)) {
-        return NextResponse.json(
-          { error: "You need to pass in a prompt and an imageType" },
-          { status: 400 }
-        );
-      }
-    
+    if (!["prompt", "imageType"].every((key) => key in body)) {
+      return NextResponse.json(
+        { error: "You need to pass in a prompt and an imageType" },
+        { status: 400 }
+      );
+    }
+
     const { prompt, imageType } = body;
-      // Check if imageType is a valid enum value
+
     if (!(imageType in ImageType)) {
-        return NextResponse.json(
-          { error: `Invalid imageType. Must be one of: ${Object.values(ImageType).join(", ")}` },
-          { status: 400 }
-        );
+      return NextResponse.json(
+        {
+          error: `Invalid imageType. Must be one of: ${Object.values(
+            ImageType
+          ).join(", ")}`,
+        },
+        { status: 400 }
+      );
     }
-
-    function generateImagePrompt(imageType : any, prompt : any) : string {
-        if (imageType === ImageType.platform) {
-            return "A 1 by 1 ratio pixel art of a square platform sprite that takes up the whole image with the theme:" + prompt; 
-        }
-        
-        else if (imageType === ImageType.background) {
-            return "A background image for a pixel art game with the theme:" + prompt;
-        }
-
-        else if (imageType === ImageType.portal) {
-            return "A 1 by 1 ratio pixel art of an exit gateway that takes up the whole image with the theme:" + prompt;
-        }
-        return "";
-    }
-
+   
     const response = await openai.images.generate({
         model: "dall-e-3",
         prompt: generateImagePrompt(imageType, prompt),
@@ -55,8 +63,8 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ imageUrl: response.data[0].url });
+  
 
-    // return NextResponse.json({ imageUrl: generateImagePrompt(imageType, prompt) });
   } catch (error) {
     console.error("Unexpected error:", error);
     return NextResponse.json(

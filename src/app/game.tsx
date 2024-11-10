@@ -18,6 +18,8 @@ const OceanPlatformer = () => {
   const [isJumping, setIsJumping] = useState(false);
   const [gameWon, setGameWon] = useState(false);
 
+  const [testingMode, setTestingMode] = useState(true);
+
   // Pixel style
   const pixel_width = 40
 
@@ -185,9 +187,9 @@ const OceanPlatformer = () => {
         <Image_Generator setBackgroundImg={setBackgroundImg} setPlatformImg={setPlatformImg} setPortalImg={setPortalImg}/>
     </div>
 
-    <div>
+    {/* <div>
       <p>{backgroundImg}</p>
-    </div>
+    </div> */}
       
   </div>
 
