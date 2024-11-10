@@ -154,7 +154,7 @@ const OceanPlatformer = (props: ObjectsJSON) => {
         }
 
         // Boundary checks
-        newPos.x = Math.max(0, Math.min(newPos.x, 750));
+        newPos.x = Math.max(0, Math.min(newPos.x, 1000));
 
         return newPos;
       });
