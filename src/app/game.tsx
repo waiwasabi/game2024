@@ -17,6 +17,7 @@ const OceanPlatformer = () => {
   const [velocity, setVelocity] = useState({ x: 0, y: 0 });
   const [isJumping, setIsJumping] = useState(false);
   const [gameWon, setGameWon] = useState(false);
+  const [isWalkingFrame1, setIsWalkingFrame1] = useState(true);
 
   const [testingMode, setTestingMode] = useState(true);
 
@@ -27,6 +28,25 @@ const OceanPlatformer = () => {
   const GRAVITY = 0.5;
   const JUMP_FORCE = -12;
   const MOVE_SPEED = 5;
+
+  const isMoving = velocity.x !== 0 || velocity.y !== 0; // Check if the player is moving
+
+  useEffect(() => {
+    let interval;
+    if (isMoving) {
+      // Start the animation interval if the player is moving
+      interval = setInterval(() => {
+        setIsWalkingFrame1(prev => !prev);
+      }, 200); // Adjust interval for desired walking speed
+    } else {
+      // Reset to the first frame when not moving
+      setIsWalkingFrame1(true);
+    }
+
+    // Clear the interval when the player stops moving
+    return () => clearInterval(interval);
+  }, [isMoving]);
+
 
   // Handle keyboard input
   useEffect(() => {
@@ -74,6 +94,7 @@ const OceanPlatformer = () => {
     };
   }, [isJumping, gameWon]);
 
+
   // Game loop
   useEffect(() => {
     if (gameWon) return;
@@ -108,6 +129,11 @@ const OceanPlatformer = () => {
             newPos.y + 40 > portal.y &&
             newPos.y < portal.y + 2 * pixel_width) {
           setGameWon(true);
+        }
+
+        if(newPos.y > 340) {
+          newPos.x = pixels["player"].x;
+          newPos.y = pixels["player"].y;
         }
 
         // Boundary checks
@@ -156,7 +182,7 @@ const OceanPlatformer = () => {
 
       {/* Player */}
       <img
-        src = "walk.png"
+        src = {isWalkingFrame1 ? "stand.png" : "walk.png"}
         className="absolute rounded"
         style={{
           left: playerPos.x,
