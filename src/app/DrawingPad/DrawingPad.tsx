@@ -3,17 +3,13 @@ import React, { useState, useRef } from "react";
 import PixelRow from "./PixelRow";
 import "../styles/DrawingPad.css";
 import html2canvas from 'html2canvas';
+import * as fs from 'fs';
 
 enum Color {
     WHITE = 1,
     RED,
     BROWN,
-}
-
-interface DrawingPadProps {
-    width: number,
-    height: number,
-    baseColor: Color
+    YELLOW,
 }
 
 interface Coord {
@@ -22,36 +18,56 @@ interface Coord {
 }
 
 interface ObjectsJSON {
-    "player": Coord[],
+    "player": Coord,
     "platforms": Coord[],
-    "portal": Coord[],
+    "portal": Coord,
+}
+
+interface DrawingPadProps {
+    width: number,
+    height: number,
+    baseColor: Color,
+    updateJSON: (input: ObjectsJSON) => void,
 }
 
 // Width_Mult represents the multiplier for the width (per pixel)
 // Height_Mult represents the multiplier for the height (per pixel)
-function createJSON(colorRows: Color[][], width: number, height: number, width_mult: number, height_mult: number): ObjectsJSON {
+function createJSON(colorRows: Color[][], width: number, height: number, width_mult: number, height_mult: number, updateJSON: (input: ObjectsJSON) => void): void {
 
-    const output: ObjectsJSON = {"player": [], "platforms": [], "portal": []};
+    const output: ObjectsJSON = {
+        "player": {"x": 0, "y": (height - 1) * height_mult}, 
+        "platforms": [], 
+        "portal": {"x": (width - 1) * width_mult, "y": (height - 1) * height_mult}, 
+    };
 
     for (let row = 0; row < height; row++) {
         for (let column = 0; column < width; column++) {
             const curr = {"x": column * width_mult, "y": row * height_mult};
             switch(colorRows[row][column]) {
                 case Color.RED:
-                    output["player"].push(curr);
+                    output["player"] = curr;
                     break;
                 case Color.BROWN:
                     output["platforms"].push(curr);
+                    break;
+                case Color.YELLOW:
+                    output["portal"] = curr;
                     break;
             }
         }
     }
 
-    return output;
+    /*
+    const fs = require('fs');
+    const jsonData = JSON.stringify(output, null, 2);
+    fs.writeFileSync('public/pixels.json', jsonData);
+    */
+    console.log(output);
+    updateJSON(output);
 }
 
 export default function DrawingPad(props: DrawingPadProps) {
-    const { width, height, baseColor} = props;
+    const { width, height, baseColor, updateJSON} = props;
   
     const panelRef = useRef(null);
 
@@ -86,6 +102,7 @@ export default function DrawingPad(props: DrawingPadProps) {
             <button className="roundButtonRed" onClick={() => setPaletteColor(Color.RED)}/>
             <button className="roundButtonBrown" onClick={() => setPaletteColor(Color.BROWN)}/>
             <button className="roundButtonWhite" onClick={() => setPaletteColor(Color.WHITE)}/>
+            <button className="roundButtonYellow" onClick={() => setPaletteColor(Color.YELLOW)}/>
         </div>
 
         <div id="pixels" ref={panelRef}>
@@ -110,8 +127,8 @@ export default function DrawingPad(props: DrawingPadProps) {
               Export as PNG
             </button>
 
-            <button onClick={() => {console.log(createJSON(arr, width, height, 1, 1));}} className="button">
-              Print Objects
+            <button onClick={() => createJSON(arr, width, height, 20, 20, updateJSON)} className="button">
+              Add Objects
             </button>
         </div>
       </div>
