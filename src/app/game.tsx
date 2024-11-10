@@ -167,7 +167,7 @@ const OceanPlatformer = (props: ObjectsJSON) => {
     <div>
     <div className="relative w-3/4 mx-auto h-100 bg-blue-200 overflow-hidden rounded-lg border-4 border-blue-400">
       {/* Ocean background elements */}
-      <img src={backgroundImg} className="object-cover opacity-30"/>
+      <img src={backgroundImg} className="object-cover opacity-70"/>
 
       {/* Platforms */}
       {platforms.map((platform, index) => (
@@ -221,7 +221,7 @@ const OceanPlatformer = (props: ObjectsJSON) => {
       <div className="absolute top-4 left-4 text-blue-800 bg-slate-100 bg-opacity-50">
         <p>Use arrow keys to move</p>
         <p>Space or Up arrow to jump</p>
-        <p>Reach the yellow portal to win!</p>
+        <p>Reach the portal to win!</p>
       </div>
     </div>
 
