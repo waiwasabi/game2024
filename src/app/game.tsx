@@ -27,7 +27,7 @@ const OceanPlatformer = (props: ObjectsJSON) => {
   const [velocity, setVelocity] = useState({ x: 0, y: 0 });
   const [isJumping, setIsJumping] = useState(false);
   const [gameWon, setGameWon] = useState(false);
-
+  const [isWalkingFrame1, setIsWalkingFrame1] = useState(true);
 
   // Pixel style
   const pixel_width = 40
@@ -43,6 +43,25 @@ const OceanPlatformer = (props: ObjectsJSON) => {
   const GRAVITY = 0.5;
   const JUMP_FORCE = -12;
   const MOVE_SPEED = 5;
+
+  const isMoving = velocity.x !== 0 || velocity.y !== 0; // Check if the player is moving
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isMoving) {
+      // Start the animation interval if the player is moving
+      interval = setInterval(() => {
+        setIsWalkingFrame1(prev => !prev);
+      }, 200); // Adjust interval for desired walking speed
+    } else {
+      // Reset to the first frame when not moving
+      setIsWalkingFrame1(true);
+    }
+
+    // Clear the interval when the player stops moving
+    return () => clearInterval(interval);
+  }, [isMoving]);
+
 
   // Handle keyboard input
   useEffect(() => {
@@ -90,6 +109,7 @@ const OceanPlatformer = (props: ObjectsJSON) => {
     };
   }, [isJumping, gameWon]);
 
+
   // Game loop
   useEffect(() => {
     if (gameWon) return;
@@ -126,6 +146,11 @@ const OceanPlatformer = (props: ObjectsJSON) => {
           setGameWon(true);
         }
 
+        if(newPos.y > 340) {
+          newPos.x = pixels["player"].x;
+          newPos.y = pixels["player"].y;
+        }
+
         // Boundary checks
         newPos.x = Math.max(0, Math.min(newPos.x, 750));
         newPos.y = Math.min(newPos.y, 530);
@@ -141,7 +166,7 @@ const OceanPlatformer = (props: ObjectsJSON) => {
     <div>
     <div className="relative w-3/4 mx-auto h-100 bg-blue-200 overflow-hidden rounded-lg border-4 border-blue-400">
       {/* Ocean background elements */}
-      <img src={backgroundImg} class="object-cover"/>
+      <img src={backgroundImg} className="object-cover"/>
 
       {/* Platforms */}
       {platforms.map((platform, index) => (
@@ -172,7 +197,7 @@ const OceanPlatformer = (props: ObjectsJSON) => {
 
       {/* Player */}
       <img
-        src = "walk.png"
+        src = {isWalkingFrame1 ? "stand.png" : "walk.png"}
         className="absolute rounded"
         style={{
           left: playerPos.x,
