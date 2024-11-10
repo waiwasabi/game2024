@@ -146,7 +146,7 @@ const OceanPlatformer = (props: ObjectsJSON) => {
           setGameWon(true);
         }
 
-        if(newPos.y > 340) {
+        if(newPos.y > 500) {
           newPos.x = pixels["player"].x;
           newPos.y = pixels["player"].y;
         }
@@ -166,7 +166,7 @@ const OceanPlatformer = (props: ObjectsJSON) => {
     <div>
     <div className="relative w-3/4 mx-auto h-100 bg-blue-200 overflow-hidden rounded-lg border-4 border-blue-400">
       {/* Ocean background elements */}
-      <img src={backgroundImg} className="object-cover opacity-50"/>
+      <img src={backgroundImg} className="object-cover opacity-30"/>
 
       {/* Platforms */}
       {platforms.map((platform, index) => (

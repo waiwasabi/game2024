@@ -127,7 +127,7 @@ export default function DrawingPad(props: DrawingPadProps) {
               Export as PNG
             </button>
 
-            <button onClick={() => createJSON(arr, width, height, 20, 20, updateJSON)} className="button">
+            <button onClick={() => createJSON(arr, width, height, 40, 40, updateJSON)} className="button">
               Add Objects
             </button>
         </div>
